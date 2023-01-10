@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .box {
+      background-color: green;
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h2>深入js防抖与节流</h2>
+  <input type="text" placeholder="请输入电话">
+  <div class="box">
+
+  </div>
+  <script>
+    // 防抖 =》 固定时间内事件值只调用一次  场景：用户输入电话号码，触发请求事件的时间不断向后移，直到用户输入最后一个号码
+    let telInput = document.querySelector('input');
+    telInput.addEventListener('input', antiShake(demo, 3000));
+
+    // 防抖封装(闭包)
+    function antiShake(fn, wait){
+      let timeOut = null; // 定时器
+      return args => {
+        // 如果在规定时间内，再次开启定时器，则销毁之前的定时器，并开启新的定时器
+        if (timeOut) clearTimeout(timeOut);
+        timeOut = setTimeout(fn , wait);
+      }
+    }
+
+    function demo(){
+      console.log('发送请求');
+    }
+
+
+    // 节流 => 一定时间内只调用第一次处理函数 场景：用户操作手机时，手指在界面上按下--移动--抬起的过程中，值发送一次或少量几次请求，而不是不断的发送请求
+    // 应用场景 => 1. 提交表单  2.高频的监听事件
+    const box = document.querySelector('.box');
+    box.addEventListener('touchmove', throttle(demo, 2000));
+
+    // 节流封装
+    function throttle(fn, wait){
+      let timeout = null;
+      return function(){
+        if (!timeout) {
+          timeout = setTimeout(()=>{
+            fn();
+            timeout = null;
+          }, wait);
+        }
+      };
+    }
+
+
+  </script>
+</body>
+</html>
