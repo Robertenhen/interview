@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h2>promise概念与应用</h2>
+  <script>
+    // 1. 为什么会有promise？它是用来解决什么问题的？
+    // 省、市、区、街道四级联动 => 回显
+    // 复杂化的场景 => 回调地狱(无限层的嵌套)
+    // run(0)
+    // setTimeout(() => {
+    //   run(1)
+    //   setTimeout(() => {
+    //     run(2)
+    //     setTimeout(() => {
+    //       run(3)
+    //     }, 1000);
+    //   }, 1000);
+    // }, 1000);
+
+    // 使用Promise对象改造
+    // new Promise((resolve, reject)=>{
+    //   run(0)
+    // }).then((res)=>{
+    //   run(1)
+    // }).then((res)=>{
+    //   run(2)
+    // }).then((res)=>{
+    //   run(3)
+    // })
+
+    // 2.Promise是什么？
+    // 例子 Promise => 承诺， 诺言
+    // a.异步  b.等待 => 成功， 失败（状态不可逆，并且Promise是以状态为驱动的）
+    let isForget = true;
+    isForget = false;
+    let getLv = new Promise((resolve, reject)=>{
+      if (!isForget) { // 没有忘记曾诺
+        let lv = {
+          color: 'green',
+          price: '$99'
+        }
+        resolve(lv); // 买包包
+      } else {
+        let err = new Error("最近工作太忙，忘记了");
+        reject(err); // 不买
+      }
+    }) // 给女朋友许下承诺
+
+    // 测试
+    // let testFn = function(){
+    //   getLv.then((fulfilled)=>{
+    //     console.log(fulfilled);
+    //   })
+    //   .catch((rejected)=>{
+    //     console.log(rejected.message);
+    //   });
+    // }
+
+    // testFn();
+
+    let buyLip = (lv)=>{
+      let lip = {
+        brand:"我尼玛",
+        color:'pink'
+      };
+      let msg = {
+        message:"我买的口红是"+ lip.brand + lip.color+"搭配我的"+lv.color,
+        lip: lip,
+        lv: lv
+      };
+
+      return Promise.resolve(msg);
+    }
+
+    // 链式调用2个Promise
+    let testFn2 = ()=>{
+      getLv.then(buyLip)
+      .then((fulfilled)=>{
+        console.log(fulfilled);
+      })
+      .catch((rejected)=>{
+        console.log(rejected.message);
+      });
+    }
+
+    testFn2();
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h2>ES6相关面试题</h2>
+  <script>
+    //  var let const
+    // 1.声明提升 =》 先上车 后买票
+    // console.log(num);
+    // var num = 123
+
+    // 2. 变量覆盖 =》 套牌车
+    // var num1 = 12;
+    // var num1 = 34;
+    // console.log(num1);  // 34
+
+    // 比如：
+    // var obj = {}
+    // var obj = ''
+    // 3. var关键字没有块级作用域 =》 红杏出墙
+    // function fn2() {
+    //   for (var i = 0; i < 3; i++) {
+    //     console.log(i);
+    //   }
+    //   console.log(i);
+    // }
+    // fn2();
+
+    // 1. const声明之后必须赋值，否则就会报错
+    // 2. const定义的值不能修改，否则报错
+    // 3. 支持let的其他属性：不会声明提升，不覆盖变量，有块级作用域
+    // const demo = 222;
+    // demo = 33;
+    // console.log(demo);
+
+    // 解构相关
+    // let a = 1;
+    // let b = 2;
+    // // 运用解构的方式
+    // [a, b] = [b, a];
+    // console.log(a,b);
+
+    // ES6方式去重  [...new Set(arr)]
+    // const arr = [1,2,3,4,3,2,1];
+    // const list = [...new Set(arr)];
+    // console.log(arr);
+    // console.log(list);
+
+    // 标杆性面试题 =》 Promise构造函数同步执行
+    const promise = new Promise((resolve, reject)=>{
+      console.log(1);
+      resolve(666); // 承诺 异步执行
+      console.log(2);
+    });
+    // .then方法 异步执行
+    promise.then((onFulfilled)=>{
+      console.log(onFulfilled);
+    });
+    console.log(4);
+
+  </script>
+</body>
+
+</html>

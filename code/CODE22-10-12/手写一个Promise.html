@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h2>手写一个Promise</h2>
+  <script>
+    // 美团经典面试题
+    // 1. 基础架构
+    function myPromise(executor) {
+      // 状态驱动
+      let self = this;
+      self.status = 'pending'; // 初始状态为等待
+      self.value = null; // 成功的结果
+      self.reason = null; // 失败的理由
+      // 使用数组存储成功和失败的方法
+      self.onFulfilledCallbacks = [];
+      self.onRejectedCallbacks = [];
+
+      // 成功的回调
+      function resolve(value){
+        // 4. 状态处理  等待 => 成功，失败(状态不可逆)
+        if (self.status === 'pending') {
+          self.value = value; // 保存成功的结果
+          self.status = 'fulfilled';
+          // 7. 状态改变，依次取出  => 发布
+          self.onFulfilledCallbacks.forEach(item => item(value));
+        }
+      }
+
+      // 失败的回调
+      function reject(reason) {
+        if (self.status === 'pending') {
+          self.reason = reason; // 保存失败的理由
+          self.status = 'rejected';
+          // 发布
+          self.onRejectedCallbacks.forEach(err => err(reason));
+        }
+
+      }
+      // 3. 立即执行一遍
+      try {
+        executor(resolve, reject);
+      } catch (error) {
+        reject(error);
+      }
+    }
+
+    // 2. then方法
+    myPromise.prototype.then = function(onFulfilled, onRejected){
+      // 5. 状态改变，走 .then
+      onFulfilled = typeof onFulfilled === 'function'?
+      onFulfilled : function (data) { resolve(data) };
+      onRejected = typeof onRejected === 'function'?
+      onRejected : function(err) { throw err; }
+
+      // 6. 发布订阅模式
+      // console.log(this.status);
+      if (this.status == 'pending') {
+        // 先把回调暂存起来 => 订阅
+        this.onFulfilledCallbacks.push(onFulfilled);
+        this.onRejectedCallbacks.push(onRejected);
+      }
+
+    }
+
+    let demo = new myPromise((resolve, reject)=>{
+      console.log('吴彦祖真帅');
+      setTimeout(() => {
+        resolve(666999);
+      }, 2000);
+    });
+
+    demo.then((fulfilled)=>{
+      console.log(fulfilled);
+    }); // 没报错，没有结果
+    
+
+
+
+  </script>
+</body>
+
+</html>

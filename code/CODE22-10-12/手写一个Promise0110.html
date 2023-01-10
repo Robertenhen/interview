@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 自定义Promise对象
+    function myPromise(executor) {
+      let self = this; 
+      // 三要素  (要点1：这里的变量为什么都要加self.， 而不是直接列出)
+      self.status = 'pending';// 状态驱动,初始状态
+      self.value = null; // 成功后的值
+      self.reason = null; // 失败原因
+
+      // 事件缓存 -- 事件订阅
+      self.resolveCallbacks = [];
+      self.rejectCallbacks = [];
+
+      function resolve(data) {
+        if (self.status == 'pending') {
+          self.value = data;
+          self.status = 'fulfilled';
+
+          // 调用成功的回调  执行缓存
+          self.resolveCallbacks.forEach(item => {
+            item(data);
+          });
+        }
+      }
+
+      function reject(reason) {
+        if (self.status == 'pending') {
+          self.reason = reason;
+          self.status = 'rejected';
+
+          // 调用失败的回调
+          self.rejectCallbacks.forEach(err => {
+            err(reason);
+          });
+        }
+      }
+
+      // 要点2：执行器函数最好报过在try catch当中
+      try {
+        executor(resolve, reject);
+      } catch (error) {
+        reject(error);
+      }
+    }
+
+    // 2.状态改变，走.then
+    myPromise.prototype.then = function (onFulfilled, onRejected) {
+      // 处理onFulfilled和onRejected对象，如果是函数则直接复制，如果不是，则转换为函数(function(data){})后复制
+      onFulfilled = typeof onFulfilled === 'function' ? onFulfilled
+        : function (data) { return resolve(data); };
+      onRejected = typeof onRejected === 'function' ? onRejected
+        : function (error) { throw error; };
+
+      // 这里的this表示function的上一级：myPromise对象
+      if (this.status == 'pending') {
+        // 事件订阅  将事件存储
+        this.resolveCallbacks.push(onFulfilled);
+        this.rejectCallbacks.push(onRejected);
+      }
+
+    }
+
+
+    let p = new myPromise((resolve, reject) => {
+      console.log('陈元元很帅气');
+      setTimeout(() => {
+        // console.log('定时器执行');
+        resolve(12312431)
+        // reject(5555)
+      }, 1000);
+    })
+
+    p.then((fulfilled) => {
+      console.log(fulfilled);
+    });
+
+  </script>
+</body>
+
+</html>

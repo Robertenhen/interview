@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h2>promise面试题分析</h2>
+  <script>
+    // 考点：构造函数立即执行   .then()是异步执行 
+    // const promise = new Promise((resolve, reject) => {
+    //   console.log(1);
+    //   resolve();
+    //   console.log(2);
+    // });
+
+    // promise.then(()=>{
+    //   console.log(3);
+    // });
+
+    // console.log(4);
+
+    // // 1 2 4 3
+
+    // 构造函数只执行一次， then可以执行多次
+    const promise = new Promise((resolve, reject)=>{
+      setTimeout(() => {
+        console.log('1');
+        resolve('2')
+      }, 1000);
+    });
+    promise.then((res)=>{
+      console.log(res);
+    });
+    promise.then((res)=>{
+      console.log(res);
+    });
+    // 1 2 2
+
+
+
+
+  </script>
+</body>
+</html>

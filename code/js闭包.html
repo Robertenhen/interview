@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h2>深度剖析js闭包</h2>
+  <script>
+    // 1.闭包是什么？ --- 方法里面返回一个方法
+    // function a(){
+    //   let a1 = 1;
+    //   return function(){
+    //     return a1;
+    //   }
+    // }
+    // 2. 闭包存在的意义是什么？
+    // 2.1 延长变量的生命周期
+    // 2.2 创造私有的环境
+
+    // let a = '小名';
+    // function fn1(){
+    //   let b = 1;
+    //   console.log(a);
+    // }
+    // // console.log(b);
+    // fn1();
+
+    // AO:active object
+    // js在运行的时候，针对函数会生成一个ao对象，函数执行完以后，ao对象和里面的属性都将被释放，结果外面就访问不到了。
+    // 而全局变量不存在于ao中，不会被释放，始终都能被访问到
+
+    // 作用域链
+    // let name = '小王八';
+    // function fn2(){
+    //   let name = "小白";
+    //   function fn3(){
+    //     let name = "小乌龟";
+    //     console.log(name);
+    //   }
+    //   fn3();
+    // }
+
+    // fn2();
+
+    // 闭包：沟通内外部方法的【桥梁】
+    // function outer() {
+    //   let a1 = 111;
+    //   let a2 = 222;
+    //   return function inner(){
+    //     return {a1, a2};
+    //   }
+    // }
+
+    // function fn5(){
+    //   let getInnerData = outer();
+    //   console.dir(getInnerData);
+    // }
+    // fn5();
+
+    // 闭包会常驻内存  =》 慎用闭包
+
+    // Vue data()为什么是一个函数？  --- data的设计就是一个闭包
+    // data(){
+    //   return {
+
+    //   }
+    // }
+
+    // 闭包为vue的每个组件创建了一个私有的变量环境，保证变量之间不会相互影响
+
+    // 如果不用闭包，而是 obj = {}来存储变量，组件间就会发生影响
+
+    // class
+
+    // 闭包中的私有变量就像class中的private变量，
+    // 而闭包中返回的方法相当于class中的public方法，包装了私有变量的get set方法,
+    // 需要注意的是，前端js没有 private  public关键字，所以采用闭包这种方式解决私有变量有限暴露的问题 ----- 类似面向对象编程
+    let makeCounter = function(){
+      let num = 0;
+      function changeBy(val){
+        num += val;
+      }
+      // 给你什么，你就拿什么 
+      return {
+        add: function(){
+          return changeBy(1);
+        },
+        reduce: function(){
+          return changeBy(-1);
+        },
+        value: function(){
+          return num;
+        }
+      };
+    }
+
+    let counter1 = makeCounter();
+    let counter2 = makeCounter();
+    counter1.add();
+    counter1.add();
+    counter2.add();
+    console.log(counter1.value());  // 2
+    console.log(counter2.value());  // 1
+
+    // 都有独立的词法作用域  ---  context
+    // 面向对象编程  --------  数据的隐藏和封装
+
+  </script>
+</body>
+
+</html>

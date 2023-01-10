@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h2>原型链与继承</h2>
+  <script>
+    // 继承
+    let obj = {
+      fn: function () {
+        console.log('风月同学很帅');
+      },
+      toString: function(){
+        console.log("toString");
+      }
+    }
+    console.log(obj);
+    // obj._proto_ => Object.prototype
+    // let obj = new Object();
+    // 当前实例开始 =》 一层一层往上  _proto_ => null (就近原则)
+    // [[Prototype]] = _proto_;
+    // obj.protoType.demo = 1312312;
+    // obj.fn();
+    // obj.sbsbsbs();
+    obj.toString();
+
+    // null => Object => {} Array => []
+    let arr = [];  //  Array
+    // arr.push(8);
+    // Array._proto_ => Object
+    console.log(typeof arr);
+    console.log(typeof obj);
+
+     // 原型与原型链
+    //  protoType
+    // [[Prototype]] = _proto_;
+
+    // 原型链是方法对象所特有的
+    // function abc(){
+
+    // }
+    // abc.prototype.demo = 43224;
+    // console.log(abc);
+
+    // let a = new abc();
+    // console.log(a);
+
+
+  </script>
+</body>
+
+</html>

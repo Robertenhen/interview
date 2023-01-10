@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h2>Vue高频面试题分析</h2>
+  <script>
+    // 1.1 虚拟dom是什么？
+    // <template>
+    //   <ul class="abc">
+    //     <li>1</li>
+    //     <li>2</li>
+    //     <li>3</li>
+    //   </ul>
+    // </template>
+    // js对象 => 下一步 document.createElement()
+    let obj = { // 三要素：目标，属性，子元素
+      target: 'ul',
+      attr: 'abc',
+      children: [
+        {
+          target:'li',
+        },
+        {
+          target:'li',
+        },
+        {
+          target:'li',
+        }
+      ]
+    }
+    // 1.2 用来做什么？
+    // 将文档对象转换为js 对象
+    // 1.3 如何提升Vue的渲染效率？
+    // 将直接操作dom(影响性能)  转变为  js对象的比较(执行效率上的问题，与页面dom的操作性能不在一个数量级上)
+    
+    // 2. Vue data() 为什么是一个函数？ 闭包 => 特性？数据的私密性
+
+    // 2.1 
+
+    // 2.2 延长变量的生命周期
+
+    // 2.3 Vue父子组件声明周期加载的时候的执行顺序
+    // 创建前后 + 挂载前后
+    // 父beforeCreate -> 父created -> 父beforeMount ->
+    // 子beforeCreate -> 子created -> 子beforeMount -> 子Mounted ->父Mounted
+
+    // 2.4 this.$nextTick() 监听声明周期的变化
+
+    // b.vue => a.vue => app.vue
+    // 保证a组件在挂载到app组件之前的结构是完整的
+
+
+    // 一超多强
+  </script>
+</body>
+</html>
